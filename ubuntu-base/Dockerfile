@@ -5,7 +5,7 @@ MAINTAINER Changju Lee <rookiecj@gmail.com>
 ARG DEBIAN_FRONTEND=noninteractive
 RUN sed -i 's/http:\/\/archive.ubuntu.com\/ubuntu\//mirror:\/\/mirrors.ubuntu.com\/mirrors.txt/' /etc/apt/sources.list
 
-# Build reqirments
+# Build requirements
 ENV BUILD_PACKAGES "software-properties-common curl"
 RUN apt-get update \
  && apt-get install --yes ${BUILD_PACKAGES}
@@ -29,7 +29,8 @@ ENTRYPOINT ["/tini", "--"]
 # or use  docker run with --init
 # --init    Run an init inside the container that forwards signals and reaps processes
 
-RUN apt-get install --yes rsyslog kmod initramfs-tools
+RUN apt-get install --yes rsyslog kmod initramfs-tools sudo
+RUN apt-get install --yes locales ntp whois vim 
 RUN apt-get install --yes sudo vim
 
 # clean up
@@ -54,8 +55,11 @@ RUN mkdir -p ${HOME} && \
 USER ${UNAME}
 ENV HOME=${HOME}
 
+VOLUME /docker
 RUN ln -s /docker $HOME/docker
-RUN cd ${HOME} && echo export QT_X11_NO_MITSHM=1>>.bashrc
+#RUN cd ${HOME} && echo export QT_X11_NO_MITSHM=1>>.bashrc
+COPY bashrc $HOME/.bashrc
+COPY Xmodmap $HOME/.Xmodmap
 
 WORKDIR $HOME
 # CMD ["param1","param2"] (as default parameters to ENTRYPOINT)

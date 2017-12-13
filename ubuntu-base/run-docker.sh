@@ -13,12 +13,18 @@ TAG=docker-ubuntu-base
 
 USER_UID=$(id -u)
 
-mkdir -p docker
+mkdir -p docker-share
 
 echo you can gracefully request to shut down using 
 echo docker stop $TAG
 
-docker run -t -i \
+# --interactive , -i        Keep STDIN open even if not attached
+# --tty , -t      Allocate a pseudo-TTY
+# --privileged      Give extended privileges to this container
+#  --sysctl net.ipv4.ip_forward=1
+#  --device=/dev/input 
+
+docker run -it \
   --volume=/tmp/.X11-unix:/tmp/.X11-unix \
   --volume=/run/user/${USER_UID}/pulse:/run/user/1000/pulse \
   --env=DISPLAY=${DISPLAY} \
@@ -26,7 +32,7 @@ docker run -t -i \
   --group-add=plugdev \
   --group-add=video \
   --rm \
-  --volume=$PWD/docker:/docker \
+  --volume=$PWD/docker-share:/docker \
   --name $TAG \
   ${IMG} \
   ${@}

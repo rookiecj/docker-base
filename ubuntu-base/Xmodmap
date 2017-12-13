@@ -1,0 +1,11 @@
+
+! lenovo key customization
+! keycode 112 (keysym 0xff55, Prior)
+! keycode 117 (keysym 0xff56, Next)
+
+! keycode 166 (keysym 0x1008ff26, XF86Back)
+! keycode 167 (keysym 0x1008ff27, XF86Forward)
+
+keycode 166 = Prior
+keycode 167 = Next
+

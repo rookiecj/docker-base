@@ -4,7 +4,7 @@
 
 xhost +local:docker
 
-IMG=travis/docker-ubuntu-base:16.04
+IMG=rookiecj/docker-ubuntu-base:16.04
 TAG=docker-ubuntu-base
 
 #echo "Searching for Docker image ..."

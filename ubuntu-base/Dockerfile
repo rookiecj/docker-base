@@ -6,7 +6,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN sed -i 's/http:\/\/archive.ubuntu.com\/ubuntu\//mirror:\/\/mirrors.ubuntu.com\/mirrors.txt/' /etc/apt/sources.list
 
 # Build requirements
-ENV BUILD_PACKAGES "software-properties-common curl"
+ENV BUILD_PACKAGES "software-properties-common"
 RUN apt-get update \
  && apt-get install --yes ${BUILD_PACKAGES}
 
@@ -31,12 +31,20 @@ ENTRYPOINT ["/tini", "--"]
 
 RUN apt-get install --yes rsyslog kmod initramfs-tools sudo
 RUN apt-get install --yes locales ntp whois vim 
-RUN apt-get install --yes sudo vim
+RUN apt-get install --yes wget curl
 
 # clean up
 RUN echo "${BUILD_PACKAGES}" | xargs apt-get purge --yes \
  && apt-get autoremove --purge --yes \
  && rm -rf /var/lib/apt/lists/*
+
+# locale
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=en_US.UTF-8
+ENV LANG en_US.UTF-8  
+ENV LANGUAGE en_US:en  
+ENV LC_ALL en_US.UTF-8   
 
 
 # Set up the user
@@ -54,6 +62,7 @@ RUN mkdir -p ${HOME} && \
     gpasswd --add ${UNAME} audio && gpasswd --add ${UNAME} video
 USER ${UNAME}
 ENV HOME=${HOME}
+
 
 VOLUME /docker
 RUN ln -s /docker $HOME/docker

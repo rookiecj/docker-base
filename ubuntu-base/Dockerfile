@@ -74,7 +74,7 @@ COPY Xmodmap $HOME/.Xmodmap
 COPY vimrc $HOME/.vimrc
 RUN mkdir -p $HOME/.vim/bundle $HOME/.vim/backup
 RUN git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
-#RUN vim +PluginInstall +qall
+RUN vim +PluginInstall +qall
 
 # CMD ["param1","param2"] (as default parameters to ENTRYPOINT)
 CMD ["/bin/bash"]

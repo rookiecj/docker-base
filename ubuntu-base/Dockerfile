@@ -31,7 +31,7 @@ ENTRYPOINT ["/tini", "--"]
 
 RUN apt-get install --yes rsyslog kmod initramfs-tools sudo
 RUN apt-get install --yes locales ntp whois vim 
-RUN apt-get install --yes wget curl
+RUN apt-get install --yes wget curl git
 
 # clean up
 RUN echo "${BUILD_PACKAGES}" | xargs apt-get purge --yes \
@@ -66,11 +66,16 @@ ENV HOME=${HOME}
 
 VOLUME /docker
 RUN ln -s /docker $HOME/docker
+WORKDIR $HOME
+
 #RUN cd ${HOME} && echo export QT_X11_NO_MITSHM=1>>.bashrc
 COPY bashrc $HOME/.bashrc
 COPY Xmodmap $HOME/.Xmodmap
+COPY vimrc $HOME/.vimrc
+RUN mkdir -p $HOME/.vim/bundle $HOME/.vim/backup
+RUN git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
+#RUN vim +PluginInstall +qall
 
-WORKDIR $HOME
 # CMD ["param1","param2"] (as default parameters to ENTRYPOINT)
 CMD ["/bin/bash"]
 

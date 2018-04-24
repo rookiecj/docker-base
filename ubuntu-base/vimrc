@@ -1,0 +1,256 @@
+" #################### Vim ####################
+" ########## File ##########
+set nocompatible 
+set backspace=indent,eol,start " Backspace 사용에 이전 줄과 연결 
+set backup " Backup 활성화 
+set backupdir=~/.vim/backup 
+set history=50 " 명령어 기록 수 
+set novisualbell " 화면 깜빡임 사용안함 
+set noerrorbells " 오류음 사용안함 
+set lazyredraw " 매크로 실행중 화면을 다시 그리지 않음 
+set loadplugins " 프로그램 시작시에 플러그인 로딩  
+
+set encoding=utf-8 " encoding 설정 
+set fileencodings=utf-8,cp949,default,latin1 
+set termencoding=utf-8 
+ 
+set printencoding=utf-8 " 인쇄 encoding 옵션
+set printmbcharset=ISO10646
+set printmbfont=r:NanumGothiccoding,c:yes,a:yes
+
+" GUI 설정
+if has("gui_running")
+    " 글꼴 설정
+    if has("win32")
+        set guifont=Consolas:h9:cHANGEUL
+    elseif has("unix")
+        set guifont=Consolas\ 9 " 글꼴 설정
+        set guifontwide=NanumGothicCoding\ 9
+    endif
+    set printfont=NanumGothicCoding\ 9
+
+    " 메뉴 설정
+    " set go-=m " 메뉴
+    " set go-=T " 툴바
+    set go-=l " 스크롤바
+    set go-=L
+    set go-=r
+    set go-=R
+    set go-=b
+
+    " 마우스 설정
+    set mouse=n " 마우스 이동제한
+    set nomousefocus
+    set mousemodel=popup " 마우스 동작은 popup
+
+    " 창 크기 설정
+    set lines=40
+    set co=90
+endif
+
+" 이전 편집 부분에서 다시 열기
+autocmd BufReadPost *
+    \ if line("'\"") > 1 && line("'\"") <= line("$") |
+    \   exe "normal! g`\"" |
+    \ endif
+
+" ########## Edit ##########
+set paste " 붙여넣기시 계단 현상 제거
+set foldmethod=manual " 코드 생략은 파일형식에서 설정
+set autoindent " 자동 들여쓰기 사용
+set wrapscan " 검색시, 파일 끝에서 되돌리기
+set nojoinspaces " 줄 연결은 공백을 하나만 지정함
+set tabstop=4 " tab 간격
+set expandtab
+set softtabstop=4
+set shiftwidth=4 " 자동 들여쓰기 간격
+set showmatch " 괄호 반전
+set autowrite " 자동저장
+"set listchars=tab:\|\ ,trail:.,extends:>,precedes:<,eol:$ " 공백문자 표시
+"set list
+set dip=iwhite " 파일비교시 공백만 무시
+set textwidth=0 " 텍스트 입력의 width 제한은 없음
+
+" ########## Tool ##########
+" ########## Syntax ##########
+" highlight를 표시함
+if &t_Co > 2 || has("gui_running")
+    syntax on
+    set hlsearch
+endif
+
+highlight clear
+set background=dark
+highlight Normal     guifg=Gray80 guibg=Black ctermfg=White
+highlight Search     guifg=LightRed guibg=Black gui=reverse ctermfg=LightRed ctermbg=DarkGray cterm=reverse
+highlight Visual     guifg=Gray25 guibg=DarkGray ctermfg=LightGray ctermbg=DarkGray
+highlight Cursor     guifg=Black guibg=Green ctermfg=Black ctermbg=Green
+highlight CursorIM   guifg=Black guibg=Yellow ctermfg=Black ctermbg=Yellow
+highlight Special    guifg=Orange ctermfg=Brown
+highlight Comment    guifg=Green guibg=Black ctermfg=DarkGreen gui=italic
+highlight StatusLine guifg=White guibg=Blue gui=NONE ctermfg=White ctermbg=Blue
+highlight Statement  guifg=Yellow gui=NONE ctermfg=Yellow cterm=NONE
+highlight Type       guifg=Cyan gui=NONE ctermfg=Cyan
+highlight Structure  guifg=Red  guibg=Black
+highlight Constant   guifg=Green guibg=Black ctermfg=Gray
+highlight String     guifg=LightMagenta guibg=Black ctermfg=LightMagenta gui=italic
+highlight Number     guifg=Magenta ctermfg=Magenta
+highlight Identifier guifg=Orange guibg=Black ctermfg=DarkYellow
+highlight MatchParen guifg=Black guibg=LightBlue
+highlight Folded     guifg=Orange guibg=Black ctermfg=DarkGreen
+highlight link IncSearch   Visual
+highlight link Character   Constant
+highlight link Boolean     Constant
+highlight link Float       Number
+highlight link typedef     Type
+highlight link Operator    Statement
+highlight link Keyword     Statement
+highlight link Exception   Statement
+
+" ########## Window ##########
+set number " 줄번호 표시
+set nuw=5
+set linespace=0 " 줄간격
+"set nowrap " 줄바꿈 안함
+set ruler " 커서 위치를 표시함
+set showcmd " 마지막 라인에 커맨드표시
+
+" Status 모양
+" disable in favor of the airline
+" highlight User1 term=underline cterm=bold ctermfg=Cyan ctermbg=Blue gui=underline gui=bold guifg=#40ffff guibg=#0000aa
+" highlight User2 term=underline cterm=underline ctermfg=green gui=underline guifg=#00ff00
+" highlight User3 term=underline cterm=underline ctermfg=yellow gui=underline guifg=#ffff00
+" highlight User4 term=underline cterm=underline ctermfg=white gui=underline guifg=#ffffff
+" highlight User5 ctermfg=cyan
+" highlight User6 ctermfg=white
+" set statusline=%4*%<\ %1*[%F]
+" set statusline+=%4*\ %5*[%{&encoding}, " encoding
+" set statusline+=%{&fileformat}]%m " file format
+" set statusline+=%4*%=\ %6*%y%4*\ %3*%l%4*/%L,\ %3*%c%4*\ \<\ %2*%P%4*\ \>
+" set laststatus=2
+
+" ########## Short Cuts ##########
+" Shift+Enter로 아래줄로 커서 넘기기 기능
+map <S-CR> <ESC>o
+map! <S-CR> <ESC>o
+"현재 줄의 마지막에 이어 쓰기
+map! <C-TAB> <S-CR><ESC>i<BACKSPACE>
+" 영역이 지정된 상태에서 Tab과 Shift+Tab으로 들여쓰기/내어쓰기를 할 수 있도록 함.
+" map <Tab> >gv
+" map <S-Tab> <gv
+" Tab 열기, 이동
+map <F2> :tabnew<CR>
+map <F4> :w<CR>
+map <C-h> gT
+map <C-l> gt
+" 코드 폴딩
+" map <C-k> zc
+" map <C-j> zo
+" Shell 호출
+map <F9> :shell<CR>
+
+" Trinity의 설정
+"" Open and close all the three plugins on the same time
+nmap <F8> :TrinityToggleAll<CR>
+" // Set the height of Source Explorer window
+let g:SrcExpl_winHeight = 8
+" // Set 100 ms for refreshing the Source Explorer
+let g:SrcExpl_refreshTime = 100
+" // Set "Enter" key to jump into the exact definition context
+" let g:SrcExpl_jumpKey = "<ENTER>"
+" // Set "Space" key for back from the definition context
+let g:SrcExpl_gobackKey = "<SPACE>"
+" // In order to Avoid conflicts, the Source Explorer should know what plugins
+" // are using buffers. And you need add their bufname into the list below
+" // according to the command ":buffers!"
+let g:SrcExpl_pluginList = [
+     \ "__Tag_List__",
+     \ "_NERD_tree_",
+     \ "Source_Explorer"
+ \ ]
+" // Enable/Disable the local definition searching, and note that this is not
+" // guaranteed to work, the Source Explorer doesn't check the syntax for now.
+" // It only searches for a match with the keyword according to command 'gd'
+let g:SrcExpl_searchLocalDef = 1
+" // Do not let the Source Explorer update the tags file when opening
+let g:SrcExpl_isUpdateTags = 0
+" // Use 'Exuberant Ctags' with '--sort=foldcase -R .' or '-L cscope.files' to
+" //  create/update a tags file
+let g:SrcExpl_updateTagsCmd = "ctags --sort=foldcase -R ."
+" // Set "<F12>" key for updating the tags file artificially
+let g:SrcExpl_updateTagsKey = "<F12>"
+
+" taglist
+let Tlist_Ctags_Cmd='/usr/bin/ctags'
+let Tlist_Inc_Winwidth=0
+let Tlist_Use_Right_Window=1
+map <F7> :TlistToggle<CR>
+
+" Vundle
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+" ctags, sudo apt-get install exuberant-ctags
+" Plugin 'szw/vim-tags'
+
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+
+" ########## File Type ##########
+filetype plugin on " 파일 종류 자동 인식
+filetype indent on
+
+if has("autocmd")
+ autocmd FileType * map <F12> :w<CR>
+
+ " 자동완성
+ autocmd FileType * inoremap { {}<LEFT>
+ autocmd FileType * inoremap [ []<LEFT>
+ autocmd FileType * inoremap ( ()<LEFT>
+ autocmd FileType * inoremap " ""<LEFT>
+ autocmd FileType * inoremap ' ''<LEFT>
+
+ " Python 설정
+ autocmd BufNewFile,BufRead *.py setfiletype python
+ autocmd BufNewFile *.py 0r ~/.vim/templetes/skeleton.py
+ autocmd FileType python set syntax=python
+ autocmd FileType python set autoindent
+ "autocmd FileType python set foldmethod=indent
+ autocmd FileType python       set complete+=k~/.vim/syntax/python.vim isk+=.,(
+ autocmd FileType python noremap <F12> :w<CR>:!python %<CR>
+ autocmd FileType python noremap <C-F12> :w<CR>:!python %
+
+ " R 설정
+ autocmd BufNewFile,BufRead *.R setfiletype r
+ autocmd BufNewFile *.R         0r ~/.vim/templetes/skeleton.R
+ autocmd FileType r set syntax=r
+ autocmd FileType r set autoindent
+ autocmd FileType r set foldmethod=indent
+ autocmd BufNewFile,BufRead *.R  inoremap { {<CR>}<C-O>O
+
+ " Graphviz 설정
+ autocmd BufNewFile,BufRead *.dot set autoindent
+ autocmd BufNewFile         *.dot 0r ~/.vim/templetes/skeleton.dot
+ autocmd BufNewFile,BufRead *.dot noremap <F12> :w<CR>:!dot -Tpng % -O<CR>:!eog %.png<CR>
+endif
+
+"" aireline config
+set laststatus=2
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+let g:airline_section_z = airline#section#create(['windowswap', '%3p%% ', 'linenr', ':%3v'])
+

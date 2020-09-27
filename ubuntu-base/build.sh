@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-docker build --tag 'rookiecj/docker-ubuntu-base:16.04' .
+docker build --tag 'rookiecj/docker-ubuntu-base:18.04' .
 
